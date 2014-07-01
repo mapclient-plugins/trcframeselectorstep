@@ -7,8 +7,8 @@ import os
 from PySide import QtGui
 from PySide import QtCore
 
-from mountpoints.workflowstep import WorkflowStepMountPoint
-from trcframeselectorstep.configuredialog import ConfigureDialog
+from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
+from mapclientplugins.trcframeselectorstep.configuredialog import ConfigureDialog
 
 
 class TRCFrameSelectorStep(WorkflowStepMountPoint):
@@ -25,7 +25,7 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'trcdata'))
+                      'http://physiomeproject.org/workflow/1.0/rdf-schema#trcdata'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
                       'integer'))
