@@ -10,6 +10,8 @@ from PySide import QtCore
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.trcframeselectorstep.configuredialog import ConfigureDialog
 
+import numpy as np
+
 
 class TRCFrameSelectorStep(WorkflowStepMountPoint):
     '''
@@ -53,9 +55,17 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         else:
             frame = self._inputFrame
 
-        landmarksNames = self._trcdata['labels']
-        landmarksCoords = self._trcdata['frames'][frame]
-        self._landmarks = dict(zip(landmarksNames, landmarksCoords))
+        landmarksNames = self._trcdata['Labels']
+        time, landmarksCoords = self._trcdata[frame]
+        landmarksNamesData = [frame, time] + landmarksCoords
+        self._landmarks = dict(zip(landmarksNames, landmarksNamesData))
+        if 'Frame#' in self._landmarks:
+            del self._landmarks['Frame#']
+        if 'Time' in self._landmarks:
+            del self._landmarks['Time']
+
+        for k, v in self._landmarks.items():
+            self._landmarks[k] = np.array(v)
         self._doneExecution()
 
     def setPortData(self, index, dataIn):
