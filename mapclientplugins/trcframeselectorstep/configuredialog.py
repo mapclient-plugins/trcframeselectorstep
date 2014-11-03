@@ -28,6 +28,7 @@ class ConfigureDialog(QtGui.QDialog):
         # We will use this method to decide whether the identifier is unique.
         self.identifierOccursCount = None
 
+        self._ui.lineEdit1.setValidator(QtGui.QIntValidator())
         self._makeConnections()
 
     def _makeConnections(self):
