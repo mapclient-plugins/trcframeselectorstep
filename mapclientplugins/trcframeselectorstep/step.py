@@ -7,8 +7,10 @@ import os
 from PySide import QtGui
 from PySide import QtCore
 
-from mountpoints.workflowstep import WorkflowStepMountPoint
-from trcframeselectorstep.configuredialog import ConfigureDialog
+from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
+from mapclientplugins.trcframeselectorstep.configuredialog import ConfigureDialog
+
+import numpy as np
 
 
 class TRCFrameSelectorStep(WorkflowStepMountPoint):
@@ -22,10 +24,11 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         self._configured = False # A step cannot be executed until it has been configured.
         self._category = 'Anthropometry'
         # Add any other initialisation code here:
+        self._icon = QtGui.QImage(':/trcframeselectorstep/images/trcframeselectoricon.png')
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'trcdata'))
+                      'http://physiomeproject.org/workflow/1.0/rdf-schema#trcdata'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
                       'integer'))
@@ -53,9 +56,17 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         else:
             frame = self._inputFrame
 
-        landmarksNames = self._trcdata['labels']
-        landmarksCoords = self._trcdata['frames'][frame]
-        self._landmarks = dict(zip(landmarksNames, landmarksCoords))
+        landmarksNames = self._trcdata['Labels']
+        time, landmarksCoords = self._trcdata[frame]
+        landmarksNamesData = [frame, time] + landmarksCoords
+        self._landmarks = dict(zip(landmarksNames, landmarksNamesData))
+        if 'Frame#' in self._landmarks:
+            del self._landmarks['Frame#']
+        if 'Time' in self._landmarks:
+            del self._landmarks['Time']
+
+        for k, v in self._landmarks.items():
+            self._landmarks[k] = np.array(v)
         self._doneExecution()
 
     def setPortData(self, index, dataIn):
