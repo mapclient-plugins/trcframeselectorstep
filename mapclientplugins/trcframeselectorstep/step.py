@@ -31,10 +31,10 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#trcdata'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'python#int'))
+                      'integer'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
-                      'python#dict'))
+                      'ju#landmarks'))
         self._config = {}
         self._config['identifier'] = ''
         self._config['Frame'] = '1'
