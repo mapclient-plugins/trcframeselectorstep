@@ -56,10 +56,15 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         else:
             frame = self._inputFrame
 
-        print self._trcdata.keys()
+        # print self._trcdata.keys()
 
         landmarksNames = self._trcdata['Labels']
-        time, landmarksCoords = self._trcdata[frame]
+        try:
+            time, landmarksCoords = self._trcdata[frame]
+        except KeyError:
+            print('Frame {} not found'.format(frame))
+            raise KeyError
+            
         landmarksNamesData = [frame, time] + landmarksCoords
         self._landmarks = dict(zip(landmarksNames, landmarksNamesData))
         if 'Frame#' in self._landmarks:
