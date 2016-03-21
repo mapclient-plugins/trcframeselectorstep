@@ -5,7 +5,7 @@ MAP Client Plugin Step
 import json
 
 from PySide import QtGui
-from PySide import QtCore
+import json
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.trcframeselectorstep.configuredialog import ConfigureDialog
@@ -34,7 +34,7 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
                       'integer'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
-                      'ju#landmarks'))
+                      'http://physiomeproject.org/workflow/1.0/rdf-schema#landmarks'))
         self._config = {}
         self._config['identifier'] = ''
         self._config['Frame'] = '1'
@@ -56,8 +56,15 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         else:
             frame = self._inputFrame
 
+        # print self._trcdata.keys()
+
         landmarksNames = self._trcdata['Labels']
-        time, landmarksCoords = self._trcdata[frame]
+        try:
+            time, landmarksCoords = self._trcdata[frame]
+        except KeyError:
+            print('Frame {} not found'.format(frame))
+            raise KeyError
+            
         landmarksNamesData = [frame, time] + landmarksCoords
         self._landmarks = dict(zip(landmarksNames, landmarksNamesData))
         if 'Frame#' in self._landmarks:
@@ -122,20 +129,15 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
 
     def serialize(self):
         '''
-        Add code to serialize this step to disk.  The filename should
-        use the step identifier (received from getIdentifier()) to keep it
-        unique within the workflow.  The suggested name for the file on
-        disk is:
-            filename = getIdentifier() + '.conf'
+        Add code to serialize this step to disk. Returns a json string for
+        mapclient to serialise.
         '''
         return json.dumps(self._config, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def deserialize(self, string):
         '''
-        Add code to deserialize this step from disk.  As with the serialize 
-        method the filename should use the step identifier.  Obviously the 
-        filename used here should be the same as the one used by the
-        serialize method.
+        Add code to deserialize this step from disk. Parses a json string
+        given by mapclient
         '''
         self._config.update(json.loads(string))
 
