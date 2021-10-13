@@ -1,9 +1,6 @@
-
-'''
+"""
 MAP Client Plugin Step
-'''
-import json
-
+"""
 from PySide2 import QtGui
 import json
 
@@ -14,10 +11,10 @@ import numpy as np
 
 
 class TRCFrameSelectorStep(WorkflowStepMountPoint):
-    '''
+    """
     Skeleton step which is intended to be a helpful starting point
     for new steps.
-    '''
+    """
 
     def __init__(self, location):
         super(TRCFrameSelectorStep, self).__init__('TRC Frame Selector', location)
@@ -43,22 +40,25 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         self._inputFrame = None
         self._landmarks = None
 
-
     def execute(self):
-        '''
+        """
         Add your code here that will kick off the execution of the step.
         Make sure you call the _doneExecution() method when finished.  This method
         may be connected up to a button in a widget for example.
-        '''
+        """
         # Put your execute step code here before calling the '_doneExecution' method.
         if self._inputFrame is None:
             frame = int(self._config['Frame'])
         else:
             frame = self._inputFrame
 
-        # print self._trcdata.keys()
+        # print(self._trcdata.keys())
+        # print(frame)
 
+        # Should this say 'Markers' instead?
+        # Maybe, but the current problem is that there are no keys, not the wrong ones...
         landmarksNames = self._trcdata['Labels']
+        # landmarksNames = self._trcdata['Markers']
         try:
             time, landmarksCoords = self._trcdata[frame]
         except KeyError:
@@ -77,32 +77,32 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         self._doneExecution()
 
     def setPortData(self, index, dataIn):
-        '''
+        """
         Add your code here that will set the appropriate objects for this step.
         The index is the index of the port in the port list.  If there is only one
         uses port for this step then the index can be ignored.
-        '''
+        """
         if index == 0:
-            self._trcdata = dataIn # trcdata
+            self._trcdata = dataIn      # trcdata
         else:
-            self._inputFrame = dataIn # integer
+            self._inputFrame = dataIn   # integer
 
     def getPortData(self, index):
-        '''
+        """
         Add your code here that will return the appropriate objects for this step.
         The index is the index of the port in the port list.  If there is only one
         provides port for this step then the index can be ignored.
-        '''
-        return self._landmarks # ju#landmarks
+        """
+        return self._landmarks      # ju#landmarks
 
     def configure(self):
-        '''
+        """
         This function will be called when the configure icon on the step is
         clicked.  It is appropriate to display a configuration dialog at this
         time.  If the conditions for the configuration of this step are complete
         then set:
             self._configured = True
-        '''
+        """
         dlg = ConfigureDialog(self._main_window)
         dlg.identifierOccursCount = self._identifierOccursCount
         dlg.setConfig(self._config)
@@ -116,29 +116,29 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         self._configuredObserver()
 
     def getIdentifier(self):
-        '''
+        """
         The identifier is a string that must be unique within a workflow.
-        '''
+        """
         return self._config['identifier']
 
     def setIdentifier(self, identifier):
-        '''
+        """
         The framework will set the identifier for this step when it is loaded.
-        '''
+        """
         self._config['identifier'] = identifier
 
     def serialize(self):
-        '''
+        """
         Add code to serialize this step to disk. Returns a json string for
         mapclient to serialise.
-        '''
+        """
         return json.dumps(self._config, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def deserialize(self, string):
-        '''
+        """
         Add code to deserialize this step from disk. Parses a json string
         given by mapclient
-        '''
+        """
         self._config.update(json.loads(string))
 
         d = ConfigureDialog(self._main_window)
