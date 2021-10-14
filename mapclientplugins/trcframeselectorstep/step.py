@@ -33,8 +33,9 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#landmarks'))
         self._config = {}
-        self._config['identifier'] = ''
         self._config['Frame'] = '1'
+
+        self._identifier = ''
 
         self._trcdata = None
         self._inputFrame = None
@@ -104,7 +105,6 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
             self._configured = True
         """
         dlg = ConfigureDialog(self._main_window)
-        dlg.identifierOccursCount = self._identifierOccursCount
         dlg.setConfig(self._config)
         dlg.validate()
         dlg.setModal(True)
@@ -119,13 +119,13 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         """
         The identifier is a string that must be unique within a workflow.
         """
-        return self._config['identifier']
+        return self._identifier
 
     def setIdentifier(self, identifier):
         """
         The framework will set the identifier for this step when it is loaded.
         """
-        self._config['identifier'] = identifier
+        self._identifier = identifier
 
     def serialize(self):
         """
@@ -142,7 +142,6 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         self._config.update(json.loads(string))
 
         d = ConfigureDialog(self._main_window)
-        d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()
 
