@@ -57,7 +57,7 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
 
         # Should this say 'Markers' instead?
         # Maybe, but the current problem is that there are no keys, not the wrong ones...
-        landmarksNames = self._trcdata['Labels']
+        landmarksNames = self._trcdata['Markers']
         # landmarksNames = self._trcdata['Markers']
         try:
             time, landmarksCoords = self._trcdata[frame]
