@@ -52,28 +52,19 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         else:
             frame = self._inputFrame
 
-        # print(self._trcdata.keys())
-        # print(frame)
-
-        # Should this say 'Markers' instead?
-        # Maybe, but the current problem is that there are no keys, not the wrong ones...
         landmarksNames = self._trcdata['Markers']
-        # landmarksNames = self._trcdata['Markers']
+
         try:
             time, landmarksCoords = self._trcdata[frame]
         except KeyError:
             print('Frame {} not found'.format(frame))
             raise KeyError
-            
-        landmarksNamesData = [frame, time] + landmarksCoords
-        self._landmarks = dict(zip(landmarksNames, landmarksNamesData))
-        if 'Frame#' in self._landmarks:
-            del self._landmarks['Frame#']
-        if 'Time' in self._landmarks:
-            del self._landmarks['Time']
+
+        self._landmarks = dict(zip(landmarksNames, landmarksCoords))
 
         for k, v in self._landmarks.items():
             self._landmarks[k] = np.array(v)
+
         self._doneExecution()
 
     def setPortData(self, index, dataIn):
