@@ -1,6 +1,6 @@
 
 
-from PySide2 import QtGui, QtWidgets
+from PySide6 import QtGui, QtWidgets
 from mapclientplugins.trcframeselectorstep.ui_configuredialog import Ui_ConfigureDialog
 
 INVALID_STYLE_SHEET = 'background-color: rgba(239, 0, 0, 50)'
