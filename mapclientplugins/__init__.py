@@ -18,4 +18,3 @@ This file is part of MAP Client. (http://launchpad.net/mapclient)
     along with MAP Client.  If not, see <http://www.gnu.org/licenses/>..
 """
 __import__('pkg_resources').declare_namespace(__name__)
-

@@ -18,7 +18,7 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
 
     def __init__(self, location):
         super(TRCFrameSelectorStep, self).__init__('TRC Frame Selector', location)
-        self._configured = False # A step cannot be executed until it has been configured.
+        self._configured = False    # A step cannot be executed until it has been configured.
         self._category = 'Anthropometry'
         # Add any other initialisation code here:
         self._icon = QtGui.QImage(':/trcframeselectorstep/images/trcframeselectoricon.png')
@@ -134,5 +134,3 @@ class TRCFrameSelectorStep(WorkflowStepMountPoint):
         d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()
-
-
